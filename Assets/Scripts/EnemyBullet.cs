@@ -22,11 +22,11 @@ public class EnemyBullet : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         var playerHealth = collision.collider.GetComponent<PlayerHealth>();
-        var blockParry = collision.collider.GetComponent<PlayerBlockParry>();
+        var parry = collision.collider.GetComponent<Parry>();
 
         if (playerHealth != null)
         {
-            if (blockParry != null && blockParry.TryParry(gameObject))
+            if (parry != null && parry.TryParry(gameObject))
             {
                 return; // parried
             }
