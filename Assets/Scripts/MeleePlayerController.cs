@@ -21,6 +21,7 @@ public class MeleePlayerController : MonoBehaviour
 
     void Update()
     {
+        // Zıplama sadece yere temas ediyorsa
         if (Input.GetButtonDown("Jump2") && isGrounded)
         {
             jumpQueued = true;
@@ -29,18 +30,24 @@ public class MeleePlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Yerde mi kontrolü
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        float moveInput = Input.GetAxis("Joystick2Horizontal");
-        if (Mathf.Abs(moveInput) < 0.1f) moveInput = 0f;
+        // Hareket girişi: önce analog stick, sonra D-Pad yedeği
+        float moveInput = Input.GetAxis("Joystick2Horizontal"); // sol analog stick
+        if (Mathf.Approximately(moveInput, 0f))
+            moveInput = Input.GetAxis("DPadHorizontal2"); // D-pad (eğer tanımlıysa)
 
+        // Hareket uygula
         rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 
+        // Yön çevir
         if ((moveInput > 0 && !facingRight) || (moveInput < 0 && facingRight))
         {
             Flip();
         }
 
+        // Zıplama uygula
         if (jumpQueued)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);

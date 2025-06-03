@@ -73,6 +73,8 @@ public class RangedPlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         float move = Input.GetAxis("Horizontal"); // Joy 1 için tanımlı
+        if (Mathf.Approximately(move, 0f))
+            move = Input.GetAxis("DPadHorizontal1");
         rb.velocity = new Vector2(move * moveSpeed, rb.velocity.y);
 
         if (jumpQueued)
