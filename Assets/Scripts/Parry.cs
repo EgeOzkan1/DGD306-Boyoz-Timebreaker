@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Parry : MonoBehaviour
 {
@@ -20,14 +20,12 @@ public class Parry : MonoBehaviour
     private bool parryActive = false;
     private float parryTimer = 0f;
     private float parryCooldownTimer = 0f;
-    private SpriteRenderer spriteRenderer;
     private GameObject activeEffect;
     private Rigidbody2D rb;
     private bool facingRight = true;
 
     void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -35,7 +33,8 @@ public class Parry : MonoBehaviour
     {
         parryCooldownTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.E) && parryCooldownTimer <= 0f)
+        // 🎯 Parry (Joystick 2, örn. Üçgen tuşu)
+        if (Input.GetKeyDown(KeyCode.Joystick2Button2) && parryCooldownTimer <= 0f)
         {
             parryActive = true;
             parryTimer = 0f;
@@ -43,7 +42,8 @@ public class Parry : MonoBehaviour
             ShowParryEffect();
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        // 🎯 Melee attack (Joystick 2'nin "Fire2" input'una bağlı)
+        if (Input.GetButtonDown("Fire2"))
         {
             MeleeAttack();
         }
@@ -110,10 +110,7 @@ public class Parry : MonoBehaviour
         if (playerBulletPrefab && firePoint)
         {
             GameObject newBullet = Instantiate(playerBulletPrefab, firePoint.position, firePoint.rotation);
-
-            Vector3 scale = newBullet.transform.localScale;
-            scale.x = facingRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
-            newBullet.transform.localScale = scale;
+            newBullet.transform.localScale = new Vector3(facingRight ? 1 : -1, 1, 1);
 
             Bullet bulletScript = newBullet.GetComponent<Bullet>();
             if (bulletScript != null)
@@ -127,7 +124,7 @@ public class Parry : MonoBehaviour
         Destroy(bullet);
     }
 
-    void MeleeAttack()
+    public void MeleeAttack()
     {
         Vector2 attackDirection = facingRight ? Vector2.right : Vector2.left;
         Vector2 attackOrigin = (Vector2)transform.position + attackDirection * meleeRange * 0.5f;

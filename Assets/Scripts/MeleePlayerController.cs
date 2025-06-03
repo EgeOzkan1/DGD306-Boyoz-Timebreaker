@@ -1,25 +1,27 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MeleePlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
 
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    private bool isGrounded = false;
+    private bool jumpQueued = false;
+
     private Rigidbody2D rb;
-    private bool jumpQueued;
     private bool facingRight = true;
-    private SpriteRenderer spriteRenderer;
-    private float moveInput;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetButtonDown("Jump2") && isGrounded)
         {
             jumpQueued = true;
         }
@@ -27,18 +29,19 @@ public class MeleePlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        moveInput = 0f;
-        if (Input.GetKey(KeyCode.LeftArrow)) moveInput = -1f;
-        if (Input.GetKey(KeyCode.RightArrow)) moveInput = 1f;
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        float moveInput = Input.GetAxis("Joystick2Horizontal");
+        if (Mathf.Abs(moveInput) < 0.1f) moveInput = 0f;
+
+        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 
         if ((moveInput > 0 && !facingRight) || (moveInput < 0 && facingRight))
         {
             Flip();
         }
 
-        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
-
-        if (jumpQueued && Mathf.Abs(rb.velocity.y) < 0.01f)
+        if (jumpQueued)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpQueued = false;
@@ -48,8 +51,15 @@ public class MeleePlayerController : MonoBehaviour
     void Flip()
     {
         facingRight = !facingRight;
-        Vector3 scale = transform.localScale;
-        scale.x = facingRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
-        transform.localScale = scale;
+        transform.localScale = new Vector3(facingRight ? 1 : -1, 1, 1);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
     }
 }

@@ -190,6 +190,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 10
+  groundCheck: {fileID: 2459606697901086619}
+  groundCheckRadius: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &7755222709561429762
 MonoBehaviour:
   m_ObjectHideFlags: 0

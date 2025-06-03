@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RangedPlayerController : MonoBehaviour
 {
@@ -10,8 +10,21 @@ public class RangedPlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private float shootTimer;
-    private bool jumpQueued;
     private bool facingRight = true;
+
+    public float slowMotionScale = 0.3f;
+    public float slowMotionDuration = 1.5f;
+    public float slowMotionCooldown = 5f;
+
+    private bool isSlowingTime = false;
+    private float slowMotionTimer = 0f;
+    private float slowMotionCooldownTimer = 0f;
+
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    private bool isGrounded = false;
+    private bool jumpQueued = false;
 
     void Awake()
     {
@@ -21,27 +34,48 @@ public class RangedPlayerController : MonoBehaviour
     void Update()
     {
         shootTimer -= Time.deltaTime;
+        slowMotionCooldownTimer -= Time.unscaledDeltaTime;
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetButtonDown("Jump1") && isGrounded)
         {
             jumpQueued = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
+        }
+
+        // Joystick 1 için slow motion: button 2 (örneğin Xbox X)
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2) && !isSlowingTime && slowMotionCooldownTimer <= 0f)
+        {
+            Time.timeScale = slowMotionScale;
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            isSlowingTime = true;
+            slowMotionTimer = slowMotionDuration;
+            slowMotionCooldownTimer = slowMotionDuration + slowMotionCooldown;
+        }
+
+        if (isSlowingTime)
+        {
+            slowMotionTimer -= Time.unscaledDeltaTime;
+            if (slowMotionTimer <= 0f)
+            {
+                Time.timeScale = 1f;
+                Time.fixedDeltaTime = 0.02f;
+                isSlowingTime = false;
+            }
         }
     }
 
     void FixedUpdate()
     {
-        float move = 0f;
-        if (Input.GetKey(KeyCode.A)) move = -1f;
-        if (Input.GetKey(KeyCode.D)) move = 1f;
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
+        float move = Input.GetAxis("Horizontal"); // Joy 1 için tanımlı
         rb.velocity = new Vector2(move * moveSpeed, rb.velocity.y);
 
-        if (jumpQueued && Mathf.Abs(rb.velocity.y) < 0.01f)
+        if (jumpQueued)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpQueued = false;
@@ -71,5 +105,14 @@ public class RangedPlayerController : MonoBehaviour
     {
         facingRight = !facingRight;
         transform.localScale = new Vector3(facingRight ? 1 : -1, 1, 1);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
     }
 }
