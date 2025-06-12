@@ -34,7 +34,7 @@ public class Parry : MonoBehaviour
         parryCooldownTimer -= Time.deltaTime;
 
         // 🎯 Parry (Joystick 2, örn. Üçgen tuşu)
-        if (Input.GetKeyDown(KeyCode.Joystick2Button2) && parryCooldownTimer <= 0f)
+        if (Input.GetKeyDown(KeyCode.Joystick2Button1) && parryCooldownTimer <= 0f)
         {
             parryActive = true;
             parryTimer = 0f;

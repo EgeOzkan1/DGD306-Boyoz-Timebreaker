@@ -3,57 +3,86 @@ using UnityEngine.UI;
 
 public class PlayerSelectMenu : MonoBehaviour
 {
-    public Button[] menuButtons;
+    public Button[] menuButtons;                  // [0] = 1P, [1] = 2P
+    public RectTransform arrowIndicator;          // Assign arrow image here
+    public Vector3 arrowOffset = new Vector3(-100f, 0f, 0f); // Offset to position arrow
+
     private int currentIndex = 0;
     private float inputCooldown = 0.2f;
     private float cooldownTimer = 0f;
 
-    void Start()
+    void OnEnable()
     {
-        HighlightButton(currentIndex);
+        currentIndex = 0;
+        MoveArrowTo(currentIndex);
+        Time.timeScale = 1f;
     }
 
     void Update()
     {
         cooldownTimer -= Time.unscaledDeltaTime;
 
-        float vertical = Input.GetAxis("DPadVertical");
+        // Match gameplay input: prefer analog stick, fallback to D-pad
+        float horizontal = Input.GetAxis("Horizontal");
+        if (Mathf.Approximately(horizontal, 0f))
+            horizontal = Input.GetAxis("DPadHorizontal1");
+
+        bool moveRight = horizontal > 0.5f;
+        bool moveLeft = horizontal < -0.5f;
 
         if (cooldownTimer <= 0f)
         {
-            if (vertical > 0.5f)
-            {
-                MoveSelection(-1);
-                cooldownTimer = inputCooldown;
-            }
-            else if (vertical < -0.5f)
+            if (moveRight)
             {
                 MoveSelection(1);
                 cooldownTimer = inputCooldown;
             }
+            else if (moveLeft)
+            {
+                MoveSelection(-1);
+                cooldownTimer = inputCooldown;
+            }
         }
 
-        if  (Input.GetButtonDown("Fire1")) 
-            {
-            menuButtons[currentIndex].onClick.Invoke();
+        // Confirm selection with Button 3 (Joystick1Button2)
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        {
+            ConfirmSelection();
         }
     }
 
     void MoveSelection(int direction)
     {
         currentIndex += direction;
-        if (currentIndex < 0) currentIndex = menuButtons.Length - 1;
-        if (currentIndex >= menuButtons.Length) currentIndex = 0;
-        HighlightButton(currentIndex);
+
+        if (currentIndex < 0)
+            currentIndex = menuButtons.Length - 1;
+        if (currentIndex >= menuButtons.Length)
+            currentIndex = 0;
+
+        MoveArrowTo(currentIndex);
     }
 
-    void HighlightButton(int index)
+    void MoveArrowTo(int index)
     {
-        for (int i = 0; i < menuButtons.Length; i++)
+        if (arrowIndicator != null && menuButtons.Length > index)
         {
-            var colors = menuButtons[i].colors;
-            colors.normalColor = (i == index) ? Color.yellow : Color.white;
-            menuButtons[i].colors = colors;
+            RectTransform buttonRect = menuButtons[index].GetComponent<RectTransform>();
+            arrowIndicator.position = buttonRect.position + arrowOffset;
+        }
+    }
+
+    void ConfirmSelection()
+    {
+        if (currentIndex == 0)
+        {
+            Debug.Log("Starting 1 Player Game");
+            // TODO: StartSinglePlayerGame();
+        }
+        else if (currentIndex == 1)
+        {
+            Debug.Log("Starting 2 Player Game");
+            // TODO: StartTwoPlayerGame();
         }
     }
 }

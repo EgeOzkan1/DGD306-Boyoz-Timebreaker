@@ -47,7 +47,7 @@ public class RangedPlayerController : MonoBehaviour
         }
 
         // Joystick 1 için slow motion: button 2 (örneğin Xbox X)
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2) && !isSlowingTime && slowMotionCooldownTimer <= 0f)
+        if (Input.GetKeyDown(KeyCode.Joystick1Button1) && !isSlowingTime && slowMotionCooldownTimer <= 0f)
         {
             Time.timeScale = slowMotionScale;
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
