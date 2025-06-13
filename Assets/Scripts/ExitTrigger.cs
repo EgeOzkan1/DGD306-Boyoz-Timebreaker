@@ -35,7 +35,8 @@ public class ExitTrigger : MonoBehaviour
     {
         if (currentScene == "Tutorial") return "Level1";
         if (currentScene == "Level1") return "Level2";
-       
+        if (currentScene == "Level2") return "Level3";
+
         return null;
     }
 }
