@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class SplitScreenManager : MonoBehaviour
 {
@@ -7,18 +7,46 @@ public class SplitScreenManager : MonoBehaviour
     public Camera cam1;
     public Camera cam2;
 
-    public float screenEdgeBuffer = 0.1f; // kenardan biraz boþluk payý
+    public float screenEdgeBuffer = 0.1f;
     public float checkInterval = 0.1f;
 
     private bool isSplit = false;
+    private int playerCount = 0;
 
     void Start()
     {
-        InvokeRepeating(nameof(CheckSplitCondition), 0f, checkInterval);
+        Invoke(nameof(SetupCameras), 0.1f); // oyuncular instantiate edildiyse 0.1 saniye sonra kontrol et
+        InvokeRepeating(nameof(CheckSplitCondition), 0.2f, checkInterval);
+    }
+
+    void SetupCameras()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        playerCount = players.Length;
+
+        if (playerCount == 1)
+        {
+            player1 = players[0].transform;
+            cam1.rect = new Rect(0f, 0f, 1f, 1f);
+            cam2.enabled = false;
+            cam1.GetComponent<CameraFollow>().target = player1;
+        }
+        else if (playerCount == 2)
+        {
+            player1 = players[0].transform;
+            player2 = players[1].transform;
+            cam1.GetComponent<CameraFollow>().target = player1;
+            cam2.GetComponent<CameraFollow>().target = player2;
+            cam1.rect = new Rect(0f, 0f, 0.5f, 1f);
+            cam2.rect = new Rect(0.5f, 0f, 0.5f, 1f);
+            cam2.enabled = true;
+        }
     }
 
     void CheckSplitCondition()
     {
+        if (playerCount != 2 || player1 == null || player2 == null) return;
+
         Vector3 screenPosP2 = cam1.WorldToViewportPoint(player2.position);
 
         bool p2OutRight = screenPosP2.x > 1f + screenEdgeBuffer;
@@ -40,13 +68,13 @@ public class SplitScreenManager : MonoBehaviour
 
         if (p2IsRight)
         {
-            cam1.rect = new Rect(0f, 0f, 0.5f, 1f); // sol
-            cam2.rect = new Rect(0.5f, 0f, 0.5f, 1f); // sað
+            cam1.rect = new Rect(0f, 0f, 0.5f, 1f);   // sol
+            cam2.rect = new Rect(0.5f, 0f, 0.5f, 1f);  // saÄŸ
         }
         else
         {
-            cam1.rect = new Rect(0.5f, 0f, 0.5f, 1f); // sað
-            cam2.rect = new Rect(0f, 0f, 0.5f, 1f); // sol
+            cam1.rect = new Rect(0.5f, 0f, 0.5f, 1f);  // saÄŸ
+            cam2.rect = new Rect(0f, 0f, 0.5f, 1f);   // sol
         }
 
         cam2.enabled = true;

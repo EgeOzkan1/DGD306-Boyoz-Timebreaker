@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerSelectMenu : MonoBehaviour
 {
@@ -44,8 +45,8 @@ public class PlayerSelectMenu : MonoBehaviour
             }
         }
 
-        // Confirm selection with Button 3 (Joystick1Button2)
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+       
+        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
             ConfirmSelection();
         }
@@ -74,15 +75,23 @@ public class PlayerSelectMenu : MonoBehaviour
 
     void ConfirmSelection()
     {
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager bulunamadı. Sahneye bir GameManager prefabı yerleştirildiğinden emin olun.");
+            return;
+        }
+
         if (currentIndex == 0)
         {
             Debug.Log("Starting 1 Player Game");
-            // TODO: StartSinglePlayerGame();
+            GameManager.Instance.CurrentMode = GameManager.GameMode.SinglePlayer;
         }
         else if (currentIndex == 1)
         {
             Debug.Log("Starting 2 Player Game");
-            // TODO: StartTwoPlayerGame();
+            GameManager.Instance.CurrentMode = GameManager.GameMode.TwoPlayer;
         }
+
+        SceneManager.LoadScene("GameScene");
     }
 }
