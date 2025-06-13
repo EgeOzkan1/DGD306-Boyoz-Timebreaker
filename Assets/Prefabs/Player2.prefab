@@ -138,7 +138,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 4
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 886a716b6cc74284f93d25801f2b445d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -219,8 +219,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111b1bc646fff4d489e46d39b71258f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  jumpForce: 13
+  moveSpeed: 9
+  jumpForce: 18
   groundCheck: {fileID: 2947057152053195531}
   groundCheckRadius: 0.2
   groundLayer:
@@ -238,19 +238,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 863100dbcbfdef34782e46d6fa07ded6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parryWindow: 0.4
+  parryWindow: 0.6
   parryCooldown: 1
-  parryDeflectEffect: {fileID: 7815730810733912071, guid: d1a43555b78ebe14296b681f9183d82b, type: 3}
   playerBulletPrefab: {fileID: 8365683756651691879, guid: 493987e6c1b016249830091c916304b9, type: 3}
   firePoint: {fileID: 6377542383111441137}
-  reflectBulletSpeed: 20
+  reflectBulletSpeed: 26
   reflectBulletDamage: 2
-  meleeRange: 1
+  meleeRange: 2
   meleeDamage: 1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
   meleeEffect: {fileID: 2241552543954256095, guid: 6218d9af69017424fb0e1c3318b0d290, type: 3}
+  meleeCooldown: 0.5
+  defaultSprite: {fileID: 21300000, guid: 7ef80b34d0bd79c4f8e96b6a962c5862, type: 3}
+  parrySprite: {fileID: 21300000, guid: 2e59739ed6a29334bb451fca8efd9110, type: 3}
+  meleeSprite: {fileID: 21300000, guid: 360f970b271b9ac4b9c8815fc532e277, type: 3}
+  meleeSpriteDuration: 0.2
 --- !u!1 &4409780648455825707
 GameObject:
   m_ObjectHideFlags: 0

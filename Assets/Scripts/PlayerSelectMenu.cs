@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerSelectMenu : MonoBehaviour
 {
-    public Button[] menuButtons;                  // [0] = 1P, [1] = 2P
-    public RectTransform arrowIndicator;          // Assign arrow image here
-    public Vector3 arrowOffset = new Vector3(-100f, 0f, 0f); // Offset to position arrow
+    public Button[] menuButtons;                  
+    public RectTransform arrowIndicator;          
+    public Vector3 arrowOffset = new Vector3(-100f, 0f, 0f); 
 
     private int currentIndex = 0;
     private float inputCooldown = 0.2f;
@@ -23,7 +23,7 @@ public class PlayerSelectMenu : MonoBehaviour
     {
         cooldownTimer -= Time.unscaledDeltaTime;
 
-        // Match gameplay input: prefer analog stick, fallback to D-pad
+        
         float horizontal = Input.GetAxis("Horizontal");
         if (Mathf.Approximately(horizontal, 0f))
             horizontal = Input.GetAxis("DPadHorizontal1");
@@ -92,6 +92,6 @@ public class PlayerSelectMenu : MonoBehaviour
             GameManager.Instance.CurrentMode = GameManager.GameMode.TwoPlayer;
         }
 
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("Tutorial");
     }
 }

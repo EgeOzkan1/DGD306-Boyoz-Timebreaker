@@ -160,7 +160,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 8115456746133758092}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 886a716b6cc74284f93d25801f2b445d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -236,14 +236,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6
-  jumpForce: 12
+  jumpForce: 20
   groundCheck: {fileID: 1680052535999855337}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   groundCheckRadius: 0.2
   detectionRange: 8
-  attackRange: 6
+  attackRange: 5
   attackCooldown: 1.5
   enemyBulletPrefab: {fileID: 8365683756651691879, guid: c854ad76195e3dd438d45a7ef9fa2dbb, type: 3}
   firePoint: {fileID: 9065012009365644900}

@@ -2,67 +2,78 @@
 
 public class SplitScreenManager : MonoBehaviour
 {
-    public Transform player1;
-    public Transform player2;
     public Camera cam1;
     public Camera cam2;
+
+    private Transform player1;
+    private Transform player2;
 
     public float screenEdgeBuffer = 0.1f;
     public float checkInterval = 0.1f;
 
     private bool isSplit = false;
-    private int playerCount = 0;
 
     void Start()
     {
-        Invoke(nameof(SetupCameras), 0.1f); // oyuncular instantiate edildiyse 0.1 saniye sonra kontrol et
-        InvokeRepeating(nameof(CheckSplitCondition), 0.2f, checkInterval);
+        Invoke(nameof(SetupPlayersAndCameras), 0.2f); // Oyuncular spawn olsun
+        InvokeRepeating(nameof(CheckSplitCondition), 0.3f, checkInterval);
     }
 
-    void SetupCameras()
+    void SetupPlayersAndCameras()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        playerCount = players.Length;
 
-        if (playerCount == 1)
+        if (players.Length == 1)
         {
+            // Tek oyunculu mod
             player1 = players[0].transform;
+            if (cam1 != null && player1 != null)
+                cam1.GetComponent<CameraFollow>().target = player1;
+
             cam1.rect = new Rect(0f, 0f, 1f, 1f);
             cam2.enabled = false;
-            cam1.GetComponent<CameraFollow>().target = player1;
+            isSplit = false;
+            return;
         }
-        else if (playerCount == 2)
+
+        if (players.Length >= 2)
         {
             player1 = players[0].transform;
             player2 = players[1].transform;
-            cam1.GetComponent<CameraFollow>().target = player1;
-            cam2.GetComponent<CameraFollow>().target = player2;
-            cam1.rect = new Rect(0f, 0f, 0.5f, 1f);
-            cam2.rect = new Rect(0.5f, 0f, 0.5f, 1f);
-            cam2.enabled = true;
+
+            if (cam1 != null) cam1.GetComponent<CameraFollow>().target = player1;
+            if (cam2 != null) cam2.GetComponent<CameraFollow>().target = player2;
         }
     }
 
     void CheckSplitCondition()
     {
-        if (playerCount != 2 || player1 == null || player2 == null) return;
+        if (player1 == null || player2 == null) return;
 
         Vector3 screenPosP2 = cam1.WorldToViewportPoint(player2.position);
 
-        bool p2OutRight = screenPosP2.x > 1f + screenEdgeBuffer;
-        bool p2OutLeft = screenPosP2.x < 0f - screenEdgeBuffer;
+        bool outRight = screenPosP2.x > 1f + screenEdgeBuffer;
+        bool outLeft = screenPosP2.x < 0f - screenEdgeBuffer;
+        bool outUp = screenPosP2.y > 1f + screenEdgeBuffer;
+        bool outDown = screenPosP2.y < 0f - screenEdgeBuffer;
 
-        if (!isSplit && (p2OutLeft || p2OutRight))
+        if (!isSplit && (outRight || outLeft || outUp || outDown))
         {
-            EnableSplitScreen(p2OutRight);
+            if (outUp || outDown)
+                EnableVerticalSplit(outUp);
+            else
+                EnableHorizontalSplit(outRight);
         }
-        else if (isSplit && screenPosP2.x > 0f + screenEdgeBuffer && screenPosP2.x < 1f - screenEdgeBuffer)
+
+        if (isSplit &&
+            screenPosP2.x > 0f + screenEdgeBuffer && screenPosP2.x < 1f - screenEdgeBuffer &&
+            screenPosP2.y > 0f + screenEdgeBuffer && screenPosP2.y < 1f - screenEdgeBuffer)
         {
             MergeScreen();
         }
     }
 
-    void EnableSplitScreen(bool p2IsRight)
+    void EnableHorizontalSplit(bool p2IsRight)
     {
         isSplit = true;
 
@@ -74,7 +85,25 @@ public class SplitScreenManager : MonoBehaviour
         else
         {
             cam1.rect = new Rect(0.5f, 0f, 0.5f, 1f);  // sağ
-            cam2.rect = new Rect(0f, 0f, 0.5f, 1f);   // sol
+            cam2.rect = new Rect(0f, 0f, 0.5f, 1f);    // sol
+        }
+
+        cam2.enabled = true;
+    }
+
+    void EnableVerticalSplit(bool p2IsAbove)
+    {
+        isSplit = true;
+
+        if (p2IsAbove)
+        {
+            cam1.rect = new Rect(0f, 0f, 1f, 0.5f);   // alt
+            cam2.rect = new Rect(0f, 0.5f, 1f, 0.5f); // üst
+        }
+        else
+        {
+            cam1.rect = new Rect(0f, 0.5f, 1f, 0.5f); // üst
+            cam2.rect = new Rect(0f, 0f, 1f, 0.5f);   // alt
         }
 
         cam2.enabled = true;

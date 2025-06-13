@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class Parry : MonoBehaviour
 {
     [Header("Parry Settings")]
     public float parryWindow = 0.5f;
     public float parryCooldown = 1f;
-    public GameObject parryDeflectEffect;
     public GameObject playerBulletPrefab;
     public Transform firePoint;
     public float reflectBulletSpeed = 20f;
@@ -15,25 +15,33 @@ public class Parry : MonoBehaviour
     public float meleeRange = 1f;
     public int meleeDamage = 1;
     public LayerMask enemyLayer;
-    public GameObject meleeEffect;
+    public float meleeCooldown = 0.5f;
 
+    [Header("Sprite Effects")]
+    public Sprite defaultSprite;
+    public Sprite parrySprite;
+    public Sprite meleeSprite;
+    public float meleeSpriteDuration = 0.2f;
+
+    private float meleeCooldownTimer = 0f;
     private bool parryActive = false;
     private float parryTimer = 0f;
     private float parryCooldownTimer = 0f;
-    private GameObject activeEffect;
     private Rigidbody2D rb;
     private bool facingRight = true;
+    private SpriteRenderer spriteRenderer;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
         parryCooldownTimer -= Time.deltaTime;
+        meleeCooldownTimer -= Time.deltaTime;
 
-        // 🎯 Parry (Joystick 2, örn. Üçgen tuşu)
         if (Input.GetKeyDown(KeyCode.Joystick2Button1) && parryCooldownTimer <= 0f)
         {
             parryActive = true;
@@ -42,10 +50,10 @@ public class Parry : MonoBehaviour
             ShowParryEffect();
         }
 
-        // 🎯 Melee attack (Joystick 2'nin "Fire2" input'una bağlı)
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && meleeCooldownTimer <= 0f)
         {
             MeleeAttack();
+            meleeCooldownTimer = meleeCooldown;
         }
 
         if (parryActive)
@@ -59,7 +67,6 @@ public class Parry : MonoBehaviour
         }
 
         RotateFirePoint();
-        UpdateParryEffect();
     }
 
     void RotateFirePoint()
@@ -71,15 +78,6 @@ public class Parry : MonoBehaviour
         firePoint.localScale = scale;
     }
 
-    void UpdateParryEffect()
-    {
-        if (activeEffect != null && firePoint != null)
-        {
-            activeEffect.transform.position = firePoint.position;
-            activeEffect.transform.rotation = Quaternion.Euler(0, 0, facingRight ? 0 : 180);
-        }
-    }
-
     public bool TryParry(GameObject bullet)
     {
         if (!parryActive) return false;
@@ -89,19 +87,17 @@ public class Parry : MonoBehaviour
 
     void ShowParryEffect()
     {
-        if (parryDeflectEffect && activeEffect == null && firePoint != null)
+        if (spriteRenderer != null && parrySprite != null)
         {
-            activeEffect = Instantiate(parryDeflectEffect, firePoint.position, Quaternion.identity);
-            activeEffect.transform.SetParent(firePoint);
-            activeEffect.transform.rotation = Quaternion.Euler(0, 0, facingRight ? 0 : 180);
+            spriteRenderer.sprite = parrySprite;
         }
     }
 
     void HideParryEffect()
     {
-        if (activeEffect != null)
+        if (spriteRenderer != null && defaultSprite != null)
         {
-            Destroy(activeEffect);
+            spriteRenderer.sprite = defaultSprite;
         }
     }
 
@@ -137,13 +133,24 @@ public class Parry : MonoBehaviour
             {
                 enemy.TakeDamage(meleeDamage);
             }
+
+            Boss1 boss = hit.GetComponent<Boss1>();
+            if (boss != null)
+            {
+                boss.TakeDamage(meleeDamage);
+            }
         }
 
-        if (meleeEffect && firePoint != null)
+        StartCoroutine(FlashMeleeSprite());
+    }
+
+    IEnumerator FlashMeleeSprite()
+    {
+        if (spriteRenderer != null && meleeSprite != null)
         {
-            GameObject effect = Instantiate(meleeEffect, firePoint.position, Quaternion.identity);
-            effect.transform.rotation = Quaternion.Euler(0, 0, facingRight ? 0 : 180);
-            Destroy(effect, 0.5f);
+            spriteRenderer.sprite = meleeSprite;
+            yield return new WaitForSeconds(meleeSpriteDuration);
+            spriteRenderer.sprite = defaultSprite;
         }
     }
 

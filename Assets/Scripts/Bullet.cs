@@ -27,10 +27,21 @@ public class Bullet : MonoBehaviour
         {
             enemy.TakeDamage(damage);
             Destroy(gameObject);
+            return;
         }
-        else if (!collision.collider.CompareTag("Player"))
+
+        Boss1 boss = collision.collider.GetComponent<Boss1>();
+        if (boss != null)
+        {
+            boss.TakeDamage(damage);
+            Destroy(gameObject);
+            return;
+        }
+
+        if (!collision.collider.CompareTag("Player"))
         {
             Destroy(gameObject);
         }
     }
+
 }
