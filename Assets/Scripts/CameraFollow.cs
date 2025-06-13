@@ -3,27 +3,23 @@
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
-    public Vector3 offset = new Vector3(0f, 0f, -10f);
-    public float smoothSpeed = 5f;
+    public float followSpeed = 5f;
 
     void LateUpdate()
     {
+        if (target == null) return;
+
         
-        if (target == null)
+        Camera cam = GetComponent<Camera>();
+        if (cam != null)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                target = player.transform;
-            }
-            else
-            {
-                return;
-            }
+            cam.orthographicSize = SplitScreenManager.IsSplit ? 5f : 7f;
         }
 
-        Vector3 desiredPosition = target.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-        transform.position = smoothedPosition;
+        Vector3 targetPosition = target.position;
+        targetPosition.z = -10f;
+
+        transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
     }
 }
+

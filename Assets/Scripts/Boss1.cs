@@ -91,6 +91,6 @@ public class Boss1 : MonoBehaviour
     {
         Debug.Log("Boss defeated!");
         Destroy(gameObject);
-        // Burada: animasyon, sahne geçişi, müzik durdurma gibi şeyler tetiklenebilir
+        
     }
 }

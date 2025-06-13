@@ -31973,8 +31973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5640209963510400974, guid: f0ff497c094b3d545a699ae45535f5c8, type: 3}
-  offset: {x: 0, y: 1.5, z: -10}
-  smoothSpeed: 5
+  followSpeed: 5
 --- !u!1 &580483718
 GameObject:
   m_ObjectHideFlags: 0
@@ -35436,8 +35435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 759360036648977389, guid: 48c163f9dcad66549b8a2f0030923ab5, type: 3}
-  offset: {x: 0, y: 1.5, z: -10}
-  smoothSpeed: 5
+  followSpeed: 5
 --- !u!114 &711129237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36558,7 +36556,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1291574204}
   m_Layer: 0
-  m_Name: Spawnpoint2
+  m_Name: SpawnPoint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37655,7 +37653,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1693212654}
   m_Layer: 0
-  m_Name: Spawnpoint1
+  m_Name: SpawnPoint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

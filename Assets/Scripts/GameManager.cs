@@ -18,11 +18,11 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Sahne geçse bile silinmesin
+            DontDestroyOnLoad(gameObject); 
         }
         else
         {
-            Destroy(gameObject); // Yalnızca bir tane olsun
+            Destroy(gameObject);
         }
     }
 }

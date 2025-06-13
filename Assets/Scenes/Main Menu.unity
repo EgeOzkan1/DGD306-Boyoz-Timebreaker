@@ -348,6 +348,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9938d24394279e4d822e780d270ecf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rangedPlayerPrefab: {fileID: 5289481423867643839, guid: f0ff497c094b3d545a699ae45535f5c8, type: 3}
+  meleePlayerPrefab: {fileID: 4007114771684180241, guid: 48c163f9dcad66549b8a2f0030923ab5, type: 3}
+  spawnPoint1: {fileID: 0}
+  spawnPoint2: {fileID: 0}
 --- !u!4 &930104854
 Transform:
   m_ObjectHideFlags: 0

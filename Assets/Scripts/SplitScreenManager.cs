@@ -1,48 +1,72 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SplitScreenManager : MonoBehaviour
 {
     public Camera cam1;
     public Camera cam2;
 
-    private Transform player1;
-    private Transform player2;
+    private Transform player1; // ranged
+    private Transform player2; // melee
 
-    public float screenEdgeBuffer = 0.1f;
+    public float screenEdgeBuffer = 5f;
     public float checkInterval = 0.1f;
 
-    private bool isSplit = false;
+    public static bool IsSplit { get; private set; }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
     void Start()
     {
-        Invoke(nameof(SetupPlayersAndCameras), 0.2f); // Oyuncular spawn olsun
+        Invoke(nameof(SetupPlayersAndCameras), 0.2f);
         InvokeRepeating(nameof(CheckSplitCondition), 0.3f, checkInterval);
     }
 
-    void SetupPlayersAndCameras()
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Invoke(nameof(SetupPlayersAndCameras), 0.3f);
+    }
+
+    public void SetupPlayersAndCameras()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
+        if (players.Length < 1)
+        {
+            Invoke(nameof(SetupPlayersAndCameras), 0.2f);
+            return;
+        }
+
         if (players.Length == 1)
         {
-            // Tek oyunculu mod
             player1 = players[0].transform;
-            if (cam1 != null && player1 != null)
-                cam1.GetComponent<CameraFollow>().target = player1;
-
+            cam1.GetComponent<CameraFollow>().target = player1;
             cam1.rect = new Rect(0f, 0f, 1f, 1f);
             cam2.enabled = false;
-            isSplit = false;
+            IsSplit = false;
             return;
         }
 
         if (players.Length >= 2)
         {
-            player1 = players[0].transform;
-            player2 = players[1].transform;
+            player1 = players[0].transform; // ranged
+            player2 = players[1].transform; // melee
 
-            if (cam1 != null) cam1.GetComponent<CameraFollow>().target = player1;
-            if (cam2 != null) cam2.GetComponent<CameraFollow>().target = player2;
+            cam1.GetComponent<CameraFollow>().target = player2; // alt: melee
+            cam2.GetComponent<CameraFollow>().target = player1; // üst: ranged
+
+            cam1.rect = new Rect(0f, 0f, 1f, 0.5f);
+            cam2.rect = new Rect(0f, 0.5f, 1f, 0.5f);
+            cam2.enabled = false;
+            IsSplit = false;
         }
     }
 
@@ -50,69 +74,39 @@ public class SplitScreenManager : MonoBehaviour
     {
         if (player1 == null || player2 == null) return;
 
-        Vector3 screenPosP2 = cam1.WorldToViewportPoint(player2.position);
+        float xDistance = Mathf.Abs(player1.position.x - player2.position.x);
 
-        bool outRight = screenPosP2.x > 1f + screenEdgeBuffer;
-        bool outLeft = screenPosP2.x < 0f - screenEdgeBuffer;
-        bool outUp = screenPosP2.y > 1f + screenEdgeBuffer;
-        bool outDown = screenPosP2.y < 0f - screenEdgeBuffer;
-
-        if (!isSplit && (outRight || outLeft || outUp || outDown))
+        if (!IsSplit && xDistance > screenEdgeBuffer)
         {
-            if (outUp || outDown)
-                EnableVerticalSplit(outUp);
-            else
-                EnableHorizontalSplit(outRight);
+            EnableVerticalSplit();
         }
 
-        if (isSplit &&
-            screenPosP2.x > 0f + screenEdgeBuffer && screenPosP2.x < 1f - screenEdgeBuffer &&
-            screenPosP2.y > 0f + screenEdgeBuffer && screenPosP2.y < 1f - screenEdgeBuffer)
+        if (IsSplit && xDistance < screenEdgeBuffer * 80f)
         {
             MergeScreen();
         }
     }
 
-    void EnableHorizontalSplit(bool p2IsRight)
+    void EnableVerticalSplit()
     {
-        isSplit = true;
+        IsSplit = true;
 
-        if (p2IsRight)
-        {
-            cam1.rect = new Rect(0f, 0f, 0.5f, 1f);   // sol
-            cam2.rect = new Rect(0.5f, 0f, 0.5f, 1f);  // sağ
-        }
-        else
-        {
-            cam1.rect = new Rect(0.5f, 0f, 0.5f, 1f);  // sağ
-            cam2.rect = new Rect(0f, 0f, 0.5f, 1f);    // sol
-        }
+        cam1.rect = new Rect(0f, 0f, 1f, 0.5f);   // alt → melee
+        cam2.rect = new Rect(0f, 0.5f, 1f, 0.5f); // üst → ranged
 
-        cam2.enabled = true;
-    }
-
-    void EnableVerticalSplit(bool p2IsAbove)
-    {
-        isSplit = true;
-
-        if (p2IsAbove)
-        {
-            cam1.rect = new Rect(0f, 0f, 1f, 0.5f);   // alt
-            cam2.rect = new Rect(0f, 0.5f, 1f, 0.5f); // üst
-        }
-        else
-        {
-            cam1.rect = new Rect(0f, 0.5f, 1f, 0.5f); // üst
-            cam2.rect = new Rect(0f, 0f, 1f, 0.5f);   // alt
-        }
+        cam1.GetComponent<CameraFollow>().target = player2;
+        cam2.GetComponent<CameraFollow>().target = player1;
 
         cam2.enabled = true;
     }
 
     void MergeScreen()
     {
-        isSplit = false;
+        IsSplit = false;
+
         cam1.rect = new Rect(0f, 0f, 1f, 1f);
+        cam1.GetComponent<CameraFollow>().target = player1;
+
         cam2.enabled = false;
     }
 }
