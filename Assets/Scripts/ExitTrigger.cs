@@ -9,12 +9,19 @@ public class ExitTrigger : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        // 🔐 Düşmanlar hâlâ sahnedeyse geçişe izin verme
+        if (EnemiesExistInScene())
+        {
+            Debug.Log("Tüm düşmanlar temizlenmeden çıkış yapılamaz!");
+            return;
+        }
+
         other.gameObject.SetActive(false); // oyuncuyu sahneden kaldır
 
         string currentScene = SceneManager.GetActiveScene().name;
         string nextSceneName = GetNextSceneName(currentScene);
 
-        if (string.IsNullOrEmpty(nextSceneName)) return; // geçiş tanımsızsa hiçbir şey yapma
+        if (string.IsNullOrEmpty(nextSceneName)) return;
 
         if (GameManager.Instance.CurrentMode == GameManager.GameMode.SinglePlayer)
         {
@@ -29,6 +36,12 @@ public class ExitTrigger : MonoBehaviour
                 SceneManager.LoadScene(nextSceneName);
             }
         }
+    }
+
+    bool EnemiesExistInScene()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        return enemies.Length > 0;
     }
 
     string GetNextSceneName(string currentScene)

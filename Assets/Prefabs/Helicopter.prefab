@@ -132,11 +132,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff4fff49467ad8499732a0de71f4f75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverAmplitude: 2
+  hoverAmplitude: 3
   hoverSpeed: 1
   retreatDistance: 12
-  retreatSpeed: 2
-  followThreshold: 10
+  retreatSpeed: 3
+  followThreshold: 20
   followSpeed: 1.5
   projectilePrefab: {fileID: 5590938131763610325, guid: 901947158a1f75848aa1cb195cc6b077, type: 3}
   firePoint: {fileID: 1689195515118820861}
