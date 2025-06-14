@@ -2,18 +2,20 @@
 
 public class Boss1 : MonoBehaviour
 {
-    [Header("Saldırı")]
+    [Header("Attack")]
     public GameObject bossProjectilePrefab;
     public Transform firePoint;
     public float shootCooldown = 3f;
     public float projectileSpeed = 8f;
 
-    [Header("Can Sistemi")]
+    [Header("Health")]
     public int maxHealth = 20;
     private int currentHealth;
 
     private float shootTimer = 0f;
     private Transform currentTarget;
+
+    private int shotCount = 0; // ➕ atış sayacı
 
     void Start()
     {
@@ -57,12 +59,16 @@ public class Boss1 : MonoBehaviour
     {
         if (bossProjectilePrefab && firePoint)
         {
+            shotCount++; // ➕ Atış sayısını artır
+
+            float currentSpeed = (shotCount % 3 == 0) ? projectileSpeed * 2f : projectileSpeed;
+
             GameObject projectile = Instantiate(bossProjectilePrefab, firePoint.position, Quaternion.identity);
             Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 Vector2 direction = (targetPosition - firePoint.position).normalized;
-                rb.velocity = direction * projectileSpeed;
+                rb.velocity = direction * currentSpeed;
             }
         }
     }
@@ -79,6 +85,7 @@ public class Boss1 : MonoBehaviour
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+        GetComponent<HitIndication>()?.Flash();
         Debug.Log("Boss took damage: " + amount + " | Remaining HP: " + currentHealth);
 
         if (currentHealth <= 0)
@@ -91,6 +98,5 @@ public class Boss1 : MonoBehaviour
     {
         Debug.Log("Boss defeated!");
         Destroy(gameObject);
-        
     }
 }

@@ -139,6 +139,12 @@ public class Parry : MonoBehaviour
             {
                 boss.TakeDamage(meleeDamage);
             }
+
+            HelicopterAI heli = hit.GetComponent<HelicopterAI>();
+            if (heli != null)
+            {
+                heli.TakeDamage(meleeDamage);
+            }
         }
 
         StartCoroutine(FlashMeleeSprite());

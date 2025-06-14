@@ -4,8 +4,11 @@ public class Bullet : MonoBehaviour
 {
     public float speed = 15f;
     public int damage = 1;
+    public float maxDistance = 15f; // maksimum mesafe (birim cinsinden)
+
     private Vector2 direction;
     private Rigidbody2D rb;
+    private Vector2 startPosition;
 
     public void SetDirection(Vector2 dir)
     {
@@ -18,6 +21,16 @@ public class Bullet : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        startPosition = transform.position;
+    }
+
+    void Update()
+    {
+        float traveled = Vector2.Distance(startPosition, transform.position);
+        if (traveled >= maxDistance)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -38,10 +51,17 @@ public class Bullet : MonoBehaviour
             return;
         }
 
+        HelicopterAI heli = collision.collider.GetComponent<HelicopterAI>();
+        if (heli != null)
+        {
+            heli.TakeDamage(damage);
+            Destroy(gameObject);
+            return;
+        }
+
         if (!collision.collider.CompareTag("Player"))
         {
             Destroy(gameObject);
         }
     }
-
 }

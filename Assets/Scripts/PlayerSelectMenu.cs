@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerSelectMenu : MonoBehaviour
 {
-    public Button[] menuButtons;                  
-    public RectTransform arrowIndicator;          
-    public Vector3 arrowOffset = new Vector3(-100f, 0f, 0f); 
+    public Button[] menuButtons;
+    public RectTransform arrowIndicator;
+    public Vector3 arrowOffset = new Vector3(-100f, 0f, 0f);
 
     private int currentIndex = 0;
     private float inputCooldown = 0.2f;
@@ -23,7 +23,7 @@ public class PlayerSelectMenu : MonoBehaviour
     {
         cooldownTimer -= Time.unscaledDeltaTime;
 
-        
+
         float horizontal = Input.GetAxis("Horizontal");
         if (Mathf.Approximately(horizontal, 0f))
             horizontal = Input.GetAxis("DPadHorizontal1");
@@ -45,7 +45,7 @@ public class PlayerSelectMenu : MonoBehaviour
             }
         }
 
-       
+
         if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
             ConfirmSelection();

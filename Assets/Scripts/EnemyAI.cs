@@ -7,10 +7,6 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Movement")]
     public float moveSpeed = 2f;
-    public float jumpForce = 6f;
-    public Transform groundCheck;
-    public LayerMask groundLayer;
-    public float groundCheckRadius = 0.2f;
 
     [Header("Detection")]
     public float detectionRange = 8f;
@@ -24,6 +20,11 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Patrol")]
     public float patrolTime = 2f;
+
+    [Header("Ledge Detection")]
+    public Transform ledgeCheck;
+    public float ledgeCheckDistance = 0.5f;
+    public LayerMask groundLayer;
 
     [Header("Health")]
     public int maxHealth = 3;
@@ -112,6 +113,12 @@ public class EnemyAI : MonoBehaviour
     {
         patrolTimer -= Time.deltaTime;
 
+        if (!IsGroundAhead())
+        {
+            patrolDirection *= -1;
+            patrolTimer = patrolTime;
+        }
+
         if (patrolTimer <= 0f)
         {
             patrolDirection *= -1;
@@ -123,6 +130,12 @@ public class EnemyAI : MonoBehaviour
 
     void Chase()
     {
+        if (!IsGroundAhead())
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y); // düşmesin
+            return;
+        }
+
         Vector2 direction = (player.position - transform.position).normalized;
         rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
     }
@@ -153,9 +166,15 @@ public class EnemyAI : MonoBehaviour
         return hit.collider == null; // Engel yoksa görüş var
     }
 
-    bool IsGrounded()
+    bool IsGroundAhead()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        if (ledgeCheck == null) return true;
+        Vector2 checkPos = ledgeCheck.position;
+        RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, ledgeCheckDistance, groundLayer);
+
+        Debug.DrawRay(checkPos, Vector2.down * ledgeCheckDistance, hit.collider ? Color.green : Color.red);
+
+        return hit.collider != null;
     }
 
     void HandleFlip()
@@ -172,6 +191,14 @@ public class EnemyAI : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+
+        // LedgeCheck konumunu da ters çevir
+        if (ledgeCheck != null)
+        {
+            Vector3 localPos = ledgeCheck.localPosition;
+            localPos.x *= -1;
+            ledgeCheck.localPosition = localPos;
+        }
     }
 
     void FacePlayer()
@@ -187,31 +214,10 @@ public class EnemyAI : MonoBehaviour
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+        GetComponent<HitIndication>()?.Flash();
         if (currentHealth <= 0)
         {
             Destroy(gameObject);
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("JumpTrigger") && IsGrounded())
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-
-        if (groundCheck != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
@@ -14,9 +14,20 @@ public class EnemyBullet : MonoBehaviour
     public void SetDirection(Vector2 dir)
     {
         direction = dir.normalized;
+
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
+
         rb.velocity = direction * speed;
+
+        
+        RotateToDirection(direction);
+    }
+
+    void RotateToDirection(Vector2 dir)
+    {
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -28,7 +39,7 @@ public class EnemyBullet : MonoBehaviour
         {
             if (parry != null && parry.TryParry(gameObject))
             {
-                return; // parried
+                return; 
             }
 
             playerHealth.TakeDamage(1);

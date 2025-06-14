@@ -81,10 +81,7 @@ public class SplitScreenManager : MonoBehaviour
             EnableVerticalSplit();
         }
 
-        if (IsSplit && xDistance < screenEdgeBuffer * 80f)
-        {
-            MergeScreen();
-        }
+        // Merge kaldırıldı
     }
 
     void EnableVerticalSplit()
@@ -98,15 +95,5 @@ public class SplitScreenManager : MonoBehaviour
         cam2.GetComponent<CameraFollow>().target = player1;
 
         cam2.enabled = true;
-    }
-
-    void MergeScreen()
-    {
-        IsSplit = false;
-
-        cam1.rect = new Rect(0f, 0f, 1f, 1f);
-        cam1.GetComponent<CameraFollow>().target = player1;
-
-        cam2.enabled = false;
     }
 }
