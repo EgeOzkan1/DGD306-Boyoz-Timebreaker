@@ -1,11 +1,13 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class ParallaxEffect: MonoBehaviour
+
+    //YiÄŸit parallax efekti yapmak istemiÅŸ yapay zekaya yaptÄ±rdÄ±ÄŸÄ± iÃ§in iÃ§ine dokunmadÄ±m. - ege
 {
-    [Tooltip("Ana kamera nesnesi (boş bırakılırsa otomatik atanır).")]
+    [Tooltip("Ana kamera nesnesi (boÃ¾ bÃ½rakÃ½lÃ½rsa otomatik atanÃ½r).")]
     public Transform cameraTransform;
 
-    [Tooltip("Bu katmanın hareket hızı. Küçük değerler daha uzaktaymış gibi görünür.")]
+    [Tooltip("Bu katmanÃ½n hareket hÃ½zÃ½. KÃ¼Ã§Ã¼k deÃ°erler daha uzaktaymÃ½Ã¾ gibi gÃ¶rÃ¼nÃ¼r.")]
     [Range(0f, 1f)]
     public float parallaxMultiplier = 0.5f;
 

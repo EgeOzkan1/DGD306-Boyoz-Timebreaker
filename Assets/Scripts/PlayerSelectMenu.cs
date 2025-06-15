@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+// Oyuncu seçim menüsünü yöneten script.
 public class PlayerSelectMenu : MonoBehaviour
 {
     public Button[] menuButtons;

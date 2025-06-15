@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Parry : MonoBehaviour
+
+//2. Karaketerin özel yeteneğini ve yakın saldırısını yapılandıran script. 2. Karakterin controller scripti çok karışmasın diye ayrı bir script olarak yazdım. - Ege
 {
     [Header("Parry Settings")]
     public float parryWindow = 0.5f;

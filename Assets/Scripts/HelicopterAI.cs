@@ -95,7 +95,7 @@ public class HelicopterAI : MonoBehaviour
         {
             if (player == null) continue;
 
-            int bulletCount = Random.Range(1, 3); // 1–2 mermi
+            int bulletCount = Random.Range(1, 3);
             for (int i = 0; i < bulletCount; i++)
             {
                 ShootAt(player.position);

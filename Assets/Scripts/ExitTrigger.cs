@@ -9,14 +9,14 @@ public class ExitTrigger : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        // 🔐 Düşmanlar hâlâ sahnedeyse geçişe izin verme
+        
         if (EnemiesExistInScene())
         {
             Debug.Log("Tüm düşmanlar temizlenmeden çıkış yapılamaz!");
             return;
         }
 
-        other.gameObject.SetActive(false); // oyuncuyu sahneden kaldır
+        other.gameObject.SetActive(false); 
 
         string currentScene = SceneManager.GetActiveScene().name;
         string nextSceneName = GetNextSceneName(currentScene);

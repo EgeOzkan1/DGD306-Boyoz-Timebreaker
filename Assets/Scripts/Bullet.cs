@@ -4,7 +4,7 @@ public class Bullet : MonoBehaviour
 {
     public float speed = 15f;
     public int damage = 1;
-    public float maxDistance = 15f; // maksimum mesafe (birim cinsinden)
+    public float maxDistance = 15f;
 
     private Vector2 direction;
     private Rigidbody2D rb;
