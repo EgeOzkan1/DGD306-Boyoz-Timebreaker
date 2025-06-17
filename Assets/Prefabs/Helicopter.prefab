@@ -134,8 +134,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverAmplitude: 3
   hoverSpeed: 1
-  retreatDistance: 12
-  retreatSpeed: 3
+  retreatDistance: 10
+  retreatSpeed: 2
   followThreshold: 20
   followSpeed: 1.5
   projectilePrefab: {fileID: 5590938131763610325, guid: 901947158a1f75848aa1cb195cc6b077, type: 3}
@@ -144,7 +144,7 @@ MonoBehaviour:
   maxShootDelay: 6
   projectileSpeed: 15
   tiltAngle: 10
-  maxHealth: 20
+  maxHealth: 16
 --- !u!50 &1814657037210311987
 Rigidbody2D:
   serializedVersion: 4

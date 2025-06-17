@@ -237,9 +237,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6
-  detectionRange: 12
-  attackRange: 11
-  attackCooldown: 2.5
+  detectionRange: 11
+  attackRange: 10
+  attackCooldown: 3
   enemyBulletPrefab: {fileID: 8365683756651691879, guid: c854ad76195e3dd438d45a7ef9fa2dbb, type: 3}
   firePoint: {fileID: 5799790807676794654}
   bulletSpeed: 18

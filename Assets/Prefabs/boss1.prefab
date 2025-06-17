@@ -148,7 +148,7 @@ MonoBehaviour:
   bossProjectilePrefab: {fileID: 5590938131763610325, guid: b80ee3cc83621aa4fab5a717278b7520, type: 3}
   firePoint: {fileID: 1416509871323490052}
   shootCooldown: 2.5
-  projectileSpeed: 15
+  projectileSpeed: 12
   maxHealth: 18
 --- !u!114 &862250330896844197
 MonoBehaviour:

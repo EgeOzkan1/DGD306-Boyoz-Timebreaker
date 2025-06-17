@@ -182,7 +182,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.19258952, y: 0.06234598}
+  m_Offset: {x: -0.21011043, y: 0.007593155}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -193,7 +193,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.385179, y: 1.875308}
+  m_Size: {x: 0.824512, y: 1.7658024}
   m_EdgeRadius: 0
 --- !u!114 &1921660219844090076
 MonoBehaviour:
@@ -241,8 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 863100dbcbfdef34782e46d6fa07ded6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parryWindow: 0.3
-  parryCooldown: 1.6
+  parryWindow: 0.4
+  parryCooldown: 1
   playerBulletPrefab: {fileID: 8365683756651691879, guid: 493987e6c1b016249830091c916304b9, type: 3}
   firePoint: {fileID: 3549650470594278238}
   reflectBulletSpeed: 26

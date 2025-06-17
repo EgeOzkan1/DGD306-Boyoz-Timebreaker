@@ -225,10 +225,10 @@ MonoBehaviour:
   jumpForce: 18
   bulletPrefab: {fileID: 8365683756651691879, guid: 493987e6c1b016249830091c916304b9, type: 3}
   firePoint: {fileID: 86643699400595119}
-  shootCooldown: 1
+  shootCooldown: 0.7
   slowMotionScale: 0.3
   slowMotionDuration: 4
-  slowMotionCooldown: 8
+  slowMotionCooldown: 6
   groundCheck: {fileID: 4556081435523163600}
   groundCheckRadius: 1
   groundLayer:
