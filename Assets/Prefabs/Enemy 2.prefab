@@ -211,7 +211,7 @@ MonoBehaviour:
   attackCooldown: 1.5
   enemyBulletPrefab: {fileID: 8365683756651691879, guid: c176171e6cae4394da3eb002fa0366cd, type: 3}
   firePoint: {fileID: 3245320382468844674}
-  bulletSpeed: 16
+  bulletSpeed: 15
   patrolTime: 2
   ledgeCheck: {fileID: 1331295693448933147}
   ledgeCheckDistance: 0.5

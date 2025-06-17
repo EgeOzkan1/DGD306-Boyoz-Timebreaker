@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 
+//Oyncuların sahnede doğmasını yöneten script.
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject rangedPlayerPrefab;

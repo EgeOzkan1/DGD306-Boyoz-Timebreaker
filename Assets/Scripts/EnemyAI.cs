@@ -132,7 +132,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!IsGroundAhead())
         {
-            rb.velocity = new Vector2(0f, rb.velocity.y); // düşmesin
+            rb.velocity = new Vector2(0f, rb.velocity.y);
             return;
         }
 
@@ -163,7 +163,7 @@ public class EnemyAI : MonoBehaviour
         float distance = Vector2.Distance(firePoint.position, player.position);
 
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, groundLayer);
-        return hit.collider == null; // Engel yoksa görüş var
+        return hit.collider == null;
     }
 
     bool IsGroundAhead()
@@ -192,7 +192,7 @@ public class EnemyAI : MonoBehaviour
         scale.x *= -1;
         transform.localScale = scale;
 
-        // LedgeCheck konumunu da ters çevir
+        
         if (ledgeCheck != null)
         {
             Vector3 localPos = ledgeCheck.localPosition;

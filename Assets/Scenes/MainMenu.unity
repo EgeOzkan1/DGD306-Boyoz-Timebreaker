@@ -1158,7 +1158,7 @@ MonoBehaviour:
   - {fileID: 1772268224}
   - {fileID: 1651853777}
   arrowIndicator: {fileID: 465625633}
-  arrowOffset: {x: -70, y: 0, z: 0}
+  arrowOffset: {x: -200, y: 0, z: 0}
 --- !u!1 &1753007749
 GameObject:
   m_ObjectHideFlags: 0

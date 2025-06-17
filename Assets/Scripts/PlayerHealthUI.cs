@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+//can durumunu gösteren UI scripti.
 public enum OwnerType { Ranged, Melee }
 
 public class PlayerHealthUI : MonoBehaviour

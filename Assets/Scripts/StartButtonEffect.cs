@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class StartButtonEffect: MonoBehaviour
 {
     public Image image;
-    public float blinkInterval = 0.5f; // Kaç saniyede bir yanýp sönecek
+    public float blinkInterval = 0.5f; 
 
     private bool isVisible = true;
     private float timer;
@@ -21,9 +21,9 @@ public class StartButtonEffect: MonoBehaviour
 
         if (timer >= blinkInterval)
         {
-            isVisible = !isVisible; // Aç/kapa
+            isVisible = !isVisible; 
             Color color = image.color;
-            color.a = isVisible ? 1f : 0f; // Aniden görünür veya görünmez
+            color.a = isVisible ? 1f : 0f; 
             image.color = color;
 
             timer = 0f;

@@ -6,8 +6,8 @@ public class SplitScreenManager : MonoBehaviour
     public Camera cam1;
     public Camera cam2;
 
-    private Transform player1; // ranged
-    private Transform player2; // melee
+    private Transform player1; 
+    private Transform player2; 
 
     public float screenEdgeBuffer = 5f;
     public float checkInterval = 0.1f;
@@ -57,11 +57,11 @@ public class SplitScreenManager : MonoBehaviour
 
         if (players.Length >= 2)
         {
-            player1 = players[0].transform; // ranged
-            player2 = players[1].transform; // melee
+            player1 = players[0].transform;
+            player2 = players[1].transform; 
 
-            cam1.GetComponent<CameraFollow>().target = player2; // alt: melee
-            cam2.GetComponent<CameraFollow>().target = player1; // üst: ranged
+            cam1.GetComponent<CameraFollow>().target = player2; 
+            cam2.GetComponent<CameraFollow>().target = player1;
 
             cam1.rect = new Rect(0f, 0f, 1f, 0.5f);
             cam2.rect = new Rect(0f, 0.5f, 1f, 0.5f);
@@ -81,15 +81,15 @@ public class SplitScreenManager : MonoBehaviour
             EnableVerticalSplit();
         }
 
-        // Merge kaldırıldı
+        
     }
 
     void EnableVerticalSplit()
     {
         IsSplit = true;
 
-        cam1.rect = new Rect(0f, 0f, 1f, 0.5f);   // alt → melee
-        cam2.rect = new Rect(0f, 0.5f, 1f, 0.5f); // üst → ranged
+        cam1.rect = new Rect(0f, 0f, 1f, 0.5f);   
+        cam2.rect = new Rect(0f, 0.5f, 1f, 0.5f); 
 
         cam1.GetComponent<CameraFollow>().target = player2;
         cam2.GetComponent<CameraFollow>().target = player1;

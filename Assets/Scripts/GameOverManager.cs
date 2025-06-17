@@ -2,6 +2,8 @@
 using UnityEngine.SceneManagement;
 
 public class GameOverManager : MonoBehaviour
+
+    //Bunu game manager içinde yapmam gerekiyodu, game manager scripti olduğunu unutmuşum - Ege
 {
     public static GameOverManager Instance;
 

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
+
+// Oyuncuların can durumunu yöneten script.
 {
     public int maxHealth = 5;
     private int currentHealth;

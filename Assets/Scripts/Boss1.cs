@@ -15,7 +15,7 @@ public class Boss1 : MonoBehaviour
     private float shootTimer = 0f;
     private Transform currentTarget;
 
-    private int shotCount = 0; // ➕ atış sayacı
+    private int shotCount = 0; 
 
     void Start()
     {
@@ -59,7 +59,7 @@ public class Boss1 : MonoBehaviour
     {
         if (bossProjectilePrefab && firePoint)
         {
-            shotCount++; // ➕ Atış sayısını artır
+            shotCount++; 
 
             float currentSpeed = (shotCount % 3 == 0) ? projectileSpeed * 2f : projectileSpeed;
 
